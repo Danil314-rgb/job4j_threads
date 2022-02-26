@@ -20,7 +20,7 @@ public class ConsoleProgress implements Runnable {
                 }
             } catch (InterruptedException e) {
                 System.out.println("\nРабота потока была прервана");
-                break;
+                Thread.currentThread().interrupt();
             }
         }
     }
