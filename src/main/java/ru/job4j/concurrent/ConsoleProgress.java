@@ -11,19 +11,17 @@ public class ConsoleProgress implements Runnable {
 
     @Override
     public void run() {
+        char[] arr = {'\\', '|', '/'};
         while (!Thread.currentThread().isInterrupted()) {
-            try{
-                Thread.sleep(500);
-                System.out.print("\rLoad: " + "\\");
-                Thread.sleep(500);
-                System.out.print("\rLoad: " + "|");
-                Thread.sleep(500);
-                System.out.print("\rLoad: " + "/");
+            try {
+                for (char item : arr) {
+                    Thread.sleep(500);
+                    System.out.print("\rLoad: " + item);
+                }
             } catch (InterruptedException e) {
                 System.out.println("\nРабота потока была прервана");
                 break;
             }
-
         }
     }
 }
