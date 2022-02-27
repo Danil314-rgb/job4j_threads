@@ -11,16 +11,18 @@ public class Wget implements Runnable {
 
     private final String url;
     private final int speed;
+    private final String nameFile;
 
-    public Wget(String url, int speed) {
+    public Wget(String url, int speed, String nameFile) {
         this.url = url;
         this.speed = speed;
+        this.nameFile = nameFile;
     }
 
     @Override
     public void run() {
         try (BufferedInputStream in = new BufferedInputStream(new URL(url).openStream());
-             FileOutputStream fileOutputStream = new FileOutputStream("pom_tmp123.dat")) {
+             FileOutputStream fileOutputStream = new FileOutputStream(nameFile)) {
             byte[] dataBuffer = new byte[1024];
             int bytesRead;
             int downloadData = 0;
@@ -47,10 +49,20 @@ public class Wget implements Runnable {
         }
     }
 
+    public static void validate(String[] args) {
+        if (args.length != 2) {
+            throw new IllegalArgumentException("Программа должна принимать ровно два аргумента.");
+        }
+    }
+
     public static void main(String[] args) throws InterruptedException {
+        /*validate(args);*/
+
         String url = "https://proof.ovh.net/files/10Mb.dat"; /*args[0];*/
         int speed = 1024; /*Integer.parseInt(args[1]);*/
-        Thread wget = new Thread(new Wget(url, speed));
+        String nameFile = url.substring(url.lastIndexOf("/") + 1);
+
+        Thread wget = new Thread(new Wget(url, speed, nameFile));
         wget.start();
         wget.join();
     }
