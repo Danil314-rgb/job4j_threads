@@ -26,23 +26,22 @@ public class Wget implements Runnable {
             byte[] dataBuffer = new byte[1024];
             int bytesRead;
             int downloadData = 0;
-            long time1 = currentTimeMillis();
-            System.out.println("Стартовый момент: " + time1 + " миллисекунд");
+            long start = currentTimeMillis();
+            System.out.println("Стартовый момент: " + start + " миллисекунд");
             while ((bytesRead = in.read(dataBuffer, 0, 1024)) != -1) {
                 downloadData += bytesRead;
-                if (downloadData == speed) {
-                    long time2 = currentTimeMillis();
-                    System.out.println("Текущий момент: " + time2 + " миллисекунд");
-                    long res = time2 - time1;
+                if (downloadData >= speed) {
+                    long finish = currentTimeMillis();
+                    System.out.println("Текущий момент: " + finish + " миллисекунд");
+                    long res = finish - start;
                     System.out.println("Разница: " + res + " миллисекунд");
                     if (res < 1000) {
                         Thread.sleep(1000 - res);
-                        downloadData = 0;
-                        time1 = currentTimeMillis();
                     }
+                    downloadData = 0;
+                    start = currentTimeMillis();
+                    fileOutputStream.write(dataBuffer, 0, bytesRead);
                 }
-                fileOutputStream.write(dataBuffer, 0, bytesRead);
-                /*Thread.sleep(1000);*/
             }
         } catch (IOException | InterruptedException e) {
             Thread.currentThread().interrupt();
