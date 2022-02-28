@@ -43,7 +43,9 @@ public class Wget implements Runnable {
                     fileOutputStream.write(dataBuffer, 0, bytesRead);
                 }
             }
-        } catch (IOException | InterruptedException e) {
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
     }
@@ -55,10 +57,10 @@ public class Wget implements Runnable {
     }
 
     public static void main(String[] args) throws InterruptedException {
-        /*validate(args);*/
+        validate(args);
 
-        String url = "https://proof.ovh.net/files/10Mb.dat"; /*args[0];*/
-        int speed = 1024; /*Integer.parseInt(args[1]);*/
+        String url = args[0];
+        int speed = Integer.parseInt(args[1]);
         String nameFile = url.substring(url.lastIndexOf("/") + 1);
 
         Thread wget = new Thread(new Wget(url, speed, nameFile));
