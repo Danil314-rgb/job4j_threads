@@ -1,8 +1,8 @@
 package ru.job4j.concurrent.cash;
 
-public final class User {
+public class User {
     private final int id;
-    private final int amount;
+    private int amount;
 
     public User(int id, int amount) {
         this.id = id;
@@ -15,5 +15,9 @@ public final class User {
 
     public int getAmount() {
         return amount;
+    }
+
+    public void setAmount(int amount) {
+        this.amount = amount;
     }
 }
