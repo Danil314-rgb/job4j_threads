@@ -8,7 +8,7 @@ public class SimpleBlockingQueueTest {
 
     @Test
     public void when() throws InterruptedException {
-        SimpleBlockingQueue queue = new SimpleBlockingQueue(2);
+        /*SimpleBlockingQueue queue = new SimpleBlockingQueue(2);
         Thread first = new Thread(() -> {
             try {
                 queue.offer(1);
@@ -27,6 +27,6 @@ public class SimpleBlockingQueueTest {
         first.start();
         second.start();
         first.join();
-        second.join();
+        second.join();*/
     }
 }
