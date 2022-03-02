@@ -10,38 +10,25 @@ public class UserStorage {
 
     private Map<Integer, User> users = new HashMap<>();
 
-    public boolean add(User user) {
-        boolean result = false;
-        if (!users.containsKey(user.getId())) {
-            users.put(user.getId(), user);
-            result = true;
-        }
-        return result;
+    public synchronized boolean add(User user) {
+        return users.putIfAbsent(user.getId(), user) == null;
     }
 
-    public boolean update(User user) {
-        boolean result = false;
-        if (delete(user)) {
-            add(user);
-            result = true;
-        }
-        return result;
+    public synchronized boolean update(User user) {
+        return users.replace(user.getId(), user) != null;
     }
 
-    public boolean delete(User user) {
-        boolean result = false;
-        if (users.containsKey(user.getId())) {
-            users.remove(user.getId());
-            result = true;
-        }
-        return result;
+    public synchronized boolean delete(User user) {
+        return users.keySet().removeIf(key -> key == user.getId());
     }
 
-    public boolean transfer(int fromId, int told, int amount) {
+    public synchronized boolean transfer(int fromId, int told, int amount) {
         boolean result = false;
-        if (users.containsKey(fromId) && users.containsKey(told) && users.get(fromId).getAmount() >= amount) {
-            update(new User(fromId, users.get(fromId).getAmount() - amount));
-            update(new User(told, users.get(told).getAmount() + amount));
+        User userFirst = users.get(fromId);
+        User userSecond = users.get(told);
+        if (userFirst != null && userSecond != null && userFirst.getAmount() >= amount) {
+            userFirst.setAmount(userFirst.getAmount() - amount);
+            userSecond.setAmount(userSecond.getAmount() + amount);
             result = true;
         }
         return result;
