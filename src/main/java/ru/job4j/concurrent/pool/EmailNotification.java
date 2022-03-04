@@ -13,8 +13,9 @@ public class EmailNotification {
         pool.submit(new Runnable() {
             @Override
             public void run() {
-                User user1 = new User(user.getUsername(), user.getEmail());
-                send(user1.getUsername(), user1.getUsername(), user1.getEmail());
+                String subject = String.format("Notification %s to email %s", user.getUsername(), user.getEmail());
+                String body = String.format("Add a new event to %s", user.getUsername());
+                send(subject, body, user.getEmail());
             }
         });
     }
