@@ -13,24 +13,28 @@ public class ThreadPool {
 
     public void ThreadPool() {
         this.size = Runtime.getRuntime().availableProcessors();
+
+        for (int i = 0; i < size; i++) {
+            /*создать потоки по количеству процессоров и поместить их в список потоков*/
+            threads.add(new Thread());
+        }
     }
 
     public void work(Runnable job) {
-        for (int i = 0; i < size; i++) {
-            new Thread(
-                    () -> {
-                        try {
-                            tasks.offer(job);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
+        new Thread(
+                () -> {
+                    try {
+                        tasks.offer(job);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
                     }
-            );
-        }
-
+                }
+        );
     }
 
     public void shutdown() {
-
+        for (int i = 0; i < threads.size(); i++) {
+            Thread.currentThread().interrupt();
+        }
     }
 }
