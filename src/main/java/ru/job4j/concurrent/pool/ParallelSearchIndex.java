@@ -32,9 +32,9 @@ public class ParallelSearchIndex<T> extends RecursiveTask<Integer> {
         return Math.max(left, right);
     }
 
-    public T search(T[] array, T value) {
+    public static <T> Integer search(T[] array, T value) {
         ForkJoinPool forkJoinPool = new ForkJoinPool();
-        return (T) forkJoinPool.invoke(new ParallelSearchIndex(array, 0, array.length - 1, value));
+        return (Integer) forkJoinPool.invoke(new ParallelSearchIndex(array, 0, array.length - 1, value));
 
     }
 
