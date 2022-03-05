@@ -16,7 +16,17 @@ public class ThreadPool {
 
         for (int i = 0; i < size; i++) {
             /*создать потоки по количеству процессоров и поместить их в список потоков*/
-            threads.add(new Thread());
+            Thread t = new Thread();
+            threads.add(new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        tasks.poll();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }));
         }
     }
 
