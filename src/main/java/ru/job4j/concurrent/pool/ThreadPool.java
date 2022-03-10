@@ -7,39 +7,34 @@ import java.util.List;
 
 public class ThreadPool {
 
-    private int size;
     private final List<Thread> threads = new LinkedList<>();
-    private final SimpleBlockingQueue<Runnable> tasks = new SimpleBlockingQueue<>(size);
+    private final SimpleBlockingQueue<Runnable> tasks = new SimpleBlockingQueue<>(5);
 
     public void ThreadPool() {
-        this.size = Runtime.getRuntime().availableProcessors();
+        int size = Runtime.getRuntime().availableProcessors();
 
         for (int i = 0; i < size; i++) {
-            /*создать потоки по количеству процессоров и поместить их в список потоков*/
-            Thread t = new Thread();
-            threads.add(new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        tasks.poll();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
+            threads.add(new Thread(() -> {
+                try {
+                    while (!Thread.currentThread().isInterrupted()) {
+                        tasks.poll().run();
+                        Thread.currentThread().start();
                     }
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
+
             }));
+
         }
     }
 
     public void work(Runnable job) {
-        new Thread(
-                () -> {
-                    try {
-                        tasks.offer(job);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-        );
+        try {
+            tasks.offer(job);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     public void shutdown() {
