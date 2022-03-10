@@ -14,18 +14,18 @@ public class RolColSumTest {
                 {4, 5, 6},
                 {7, 8, 9}
         };
-        RolColSum sum = new RolColSum();
-        assertThat(sum.sums(arr).getRowSum(), is(45));
+        RolColSum.Sums[] res = RolColSum.sum(arr);
+        assertThat(res[1].getColSum(), is(15));
     }
 
     @Test
-    public void whenAsyncSum() throws Exception {
+    public void whenAsyncSum() {
         int[][] arr = {
                 {1, 2, 3},
                 {4, 5, 6},
                 {7, 8, 9}
         };
-        RolColSum sum = new RolColSum();
-        assertThat(sum.asyncSum(arr).get().getColSum(), is(45));
+        RolColSum.Sums[] res = RolColSum.asyncSum(arr);
+        assertThat(res[2].getRowSum(), is(24));
     }
 }
